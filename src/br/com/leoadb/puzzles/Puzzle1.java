@@ -1,5 +1,6 @@
 package br.com.leoadb.puzzles;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
@@ -15,7 +16,8 @@ import java.util.stream.Stream;
 
 public class Puzzle1 {
 
-	public static boolean isSubset(Integer[] arr1, Integer[] arr2) {
+	//does not handle duplicates
+	public boolean isSubset(Integer[] arr1, Integer[] arr2) {
 		Map<Integer, Boolean> map = new HashMap<>(arr1.length);
 
 		Stream.of(arr1).forEach(n -> map.put(n, true));
@@ -23,15 +25,20 @@ public class Puzzle1 {
 		return Stream.of(arr2).allMatch(m -> map.containsKey(m));
 	}
 
-	public static void main(String... args) {
-		boolean result = isSubset(new Integer[] {11, 1, 13, 21, 3, 7}, new Integer[] {11, 3, 7, 1});
-		assert result;
+	//handle duplicates
+	public boolean isSubset2(Integer[] arr1, Integer[] arr2) {
+		Arrays.sort(arr1);
+		Arrays.sort(arr2);
 
-		result = isSubset(new Integer[] {1, 2, 3, 4, 5, 6}, new Integer[] {1, 2, 4});
-		assert result;
+		int j = 0;
 
-		result = isSubset(new Integer[] {10, 5, 2, 23, 19}, new Integer[] {19, 5, 3});
-		assert !result;
+		for(int i = 0; i < arr1.length && j < arr2.length; i++) {
+			if (arr1[i] == arr2[j]) {
+				j++;
+			}
+		}
+
+		return j == arr2.length;
 	}
 
 }
